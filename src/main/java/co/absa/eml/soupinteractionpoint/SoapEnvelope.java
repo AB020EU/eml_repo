@@ -1,7 +1,24 @@
 package co.absa.eml.soupinteractionpoint;
 
+import co.absa.eml.applicationcapture.ApplicationCaptureData;
+import co.absa.eml.dto.CaptureApplication;
+import co.absa.eml.restinteractionpoints.RestInteractionPoints;
+import com.google.gson.Gson;
+import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+
 public class SoapEnvelope {
-    public String XML() {
+
+    public String XML(CaptureApplication captureApplication) {
+        RestInteractionPoints restInteractionPoints = new RestInteractionPoints();
+
+        Response response0 = restInteractionPoints.get("/get/application/data");
+       //TODO:date of birth
+        //TODO: name and surname
+
+
         String a = "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "   <SOAP-ENV:Header/>\n" +
                 "   <S:Body>\n" +
@@ -32,7 +49,7 @@ public class SoapEnvelope {
                 "               <notificationMethod>E</notificationMethod>\n" +
                 "               <cellPhoneNumber\n" +
                 "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
-                "               <emailAddress>philani.jass@absa.africa</emailAddress>\n" +
+                "               <emailAddress>"+captureApplication.getEmail()+"</emailAddress>\n" +
                 "            </notificationDetails>\n" +
                 "            <originatorDetails>\n" +
                 "               <originatorName\n" +
@@ -51,7 +68,7 @@ public class SoapEnvelope {
                 "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
                 "               <cellPhoneNumber\n" +
                 "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
-                "               <emailAddress>mmakgosi.letwaba@absa.africa</emailAddress>\n" +
+                "               <emailAddress>"+captureApplication.getEmail()+"</emailAddress>\n" +
                 "            </originatorDetails>\n" +
                 "            <contractorDetails\n" +
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
@@ -76,7 +93,7 @@ public class SoapEnvelope {
                 "            <identificationType>01</identificationType>\n" +
                 "            <otherIdentificationType\n" +
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
-                "            <idPassportNumber>7707085787086</idPassportNumber>\n" +
+                "            <idPassportNumber>"+response0.body().path("id_number")+"</idPassportNumber>\n" +
                 "            <dateOfBirth>19770708</dateOfBirth>\n" +
                 "            <gender>1</gender>\n" +
                 "            <race>W</race>\n" +
@@ -109,11 +126,11 @@ public class SoapEnvelope {
                 "               <residentialAddressLine1>223 Telco Street</residentialAddressLine1>\n" +
                 "               <residentialAddressLine2\n" +
                 "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
-                "               <residentialSuburb>DURBANVILLE</residentialSuburb>\n" +
+                "               <residentialSuburb>"+response0.body().path("")+"</residentialSuburb>\n" +
                 "               <residentialCity>CAPE TOWN</residentialCity>\n" +
                 "               <residentialPostalCode>7550</residentialPostalCode>\n" +
-                "               <postalAddressLine1>223 Telco Street</postalAddressLine1>\n" +
-                "               <postalSuburb>DURBANVILLE</postalSuburb>\n" +
+                "               <postalAddressLine1>"+response0.body().path("street_number")+""+response0.body().path("street_name")+"</postalAddressLine1>\n" +
+                "               <postalSuburb>"+response0.body().path("suburb")+"</postalSuburb>\n" +
                 "               <postalCity>CAPE TOWN</postalCity>\n" +
                 "               <postalCode>7551</postalCode>\n" +
                 "               <presentAddressSince>20050513</presentAddressSince>\n" +
@@ -121,7 +138,7 @@ public class SoapEnvelope {
                 "               <homeTelephoneCode></homeTelephoneCode>\n" +
                 "               <homeTelephoneNumber></homeTelephoneNumber>\n" +
                 "               <cellPhoneNumber>0824990687</cellPhoneNumber>\n" +
-                "               <emailAddress>mmakgosi.letwaba@absa.africa</emailAddress>\n" +
+                "               <emailAddress>"+captureApplication.getEmail()+"</emailAddress>\n" +
                 "               <communicationMethod>E</communicationMethod>\n" +
                 "            </contactDetails>\n" +
                 "            <employmentDetails>\n" +
@@ -240,7 +257,7 @@ public class SoapEnvelope {
                 "            <propertyType>D</propertyType>\n" +
                 "            <streetName>Telco Street</streetName>\n" +
                 "            <streetNumber>1234</streetNumber>\n" +
-                "            <erfNumber>393</erfNumber>\n" +
+                "            <erfNumber>"+response0.body().path("erf")+"</erfNumber>\n" +
                 "            <portionNumber\n" +
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
                 "            <complexName\n" +

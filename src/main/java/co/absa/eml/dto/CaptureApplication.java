@@ -3,6 +3,15 @@ package co.absa.eml.dto;
 public class CaptureApplication {
 String abNumber;
 int iterations;
+    String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getAbNumber() {
         return abNumber;

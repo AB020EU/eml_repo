@@ -35,7 +35,8 @@ public class ApplicationCaptureBusinessLogic {
         try {
 
             for(int i=0;i<captureApplication.getIterations();i++){
-                soapInteractionPoint.send(captureApplication.getAbNumber(),"https://eomlsit.absa.africa/homeloans/services/HomeLoanFulfilmentSOAP",soapEnvelope.XML(),"\'\'");
+
+                soapInteractionPoint.send(captureApplication.getAbNumber(),"https://eomlsit.absa.africa/homeloans/services/HomeLoanFulfilmentSOAP",soapEnvelope.XML(captureApplication),"\'\'");
             }
 
             RestResponse restResponse = new RestResponse();

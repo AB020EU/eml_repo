@@ -59,7 +59,7 @@ public class RestInteractionPoints {
                 .relaxedHTTPSValidation()
                 .contentType(ContentType.JSON)
                 .request()
-                .get(baseURI+endPoint);
+                .get("http://localhost:8083"+endPoint);
 
     }
 

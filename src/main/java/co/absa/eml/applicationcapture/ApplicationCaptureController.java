@@ -16,6 +16,8 @@ public class ApplicationCaptureController {
 
     @Autowired
     ApplicationCaptureBusinessLogic applicationCaptureBusinessLogic;
+    @Autowired
+    ApplicationCaptureData applicationCaptureData;
 
 //    @GetMapping("/get/all/client/tests")
 //    public ResponseEntity<?> getAllClients() {
@@ -37,6 +39,11 @@ public class ApplicationCaptureController {
     public ResponseEntity<?> capturedApplication(@RequestBody ApplicationCapture applicationCapture) {
 
         return applicationCaptureBusinessLogic.capturedApplication(applicationCapture);
+    }
+    @GetMapping("/get/application/data")
+    public ResponseEntity<?> getApplication() {
+
+        return applicationCaptureData.getApplicationData();
     }
 
 }

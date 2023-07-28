@@ -161,6 +161,21 @@ public class Connections {
         }
         return connection;
     }
+    public  Connection getEomlDbConnection() {
+        Connection connection = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eml_DB",
+                    "postgres", "admin");
+            System.out.println("Opened database successfully");
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return connection;
+    }
+
     public Connection getGeospatialConnection() {
 
         Connection connection = null;

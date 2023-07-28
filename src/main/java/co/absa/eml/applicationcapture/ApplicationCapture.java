@@ -16,6 +16,8 @@ public class ApplicationCapture extends Auditable<String> {
     String applicationNumber;
     String abNumber;
 
+
+
     public String getId() {
         return id;
     }
