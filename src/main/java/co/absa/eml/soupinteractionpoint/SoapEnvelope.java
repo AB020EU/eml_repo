@@ -1,6 +1,7 @@
 package co.absa.eml.soupinteractionpoint;
 
 import co.absa.eml.applicationcapture.ApplicationCaptureData;
+import co.absa.eml.applicationcapture.ReadExcel;
 import co.absa.eml.dto.CaptureApplication;
 import co.absa.eml.restinteractionpoints.RestInteractionPoints;
 import com.google.gson.Gson;
@@ -17,6 +18,9 @@ public class SoapEnvelope {
         Response response0 = restInteractionPoints.get("/get/application/data");
        //TODO:date of birth
         //TODO: name and surname
+        ReadExcel readExcel = new ReadExcel();
+        readExcel.setExcel();
+
 
 
         String a = "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
@@ -88,8 +92,8 @@ public class SoapEnvelope {
                 "         </applicationDetails>\n" +
                 "         <personalDetails>\n" +
                 "            <title>05</title>\n" +
-                "            <fullNames>STEPHEN CHARL</fullNames>\n" +
-                "            <surname>THORNTON</surname>\n" +
+                "            <fullNames>"+readExcel.getName()+"</fullNames>\n" +
+                "            <surname>"+readExcel.getSurname()+"</surname>\n" +
                 "            <identificationType>01</identificationType>\n" +
                 "            <otherIdentificationType\n" +
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
