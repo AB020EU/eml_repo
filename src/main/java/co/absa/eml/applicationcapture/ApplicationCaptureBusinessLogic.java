@@ -69,6 +69,7 @@ public class ApplicationCaptureBusinessLogic {
             restResponse.setMessage("Application captured successfully");
             restResponse.setStatus("200");
 
+
             return ResponseEntity.status(HttpStatus.OK).body(restResponse);
 
         }catch (Exception e){

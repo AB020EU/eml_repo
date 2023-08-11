@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface LightStonePropertyRepository extends JpaRepository<LightStonePropertiesEntity, String> {
    @Query(value ="select * from lightStone_properties_entity where buyer_idck=?1",nativeQuery = true)
     Optional<LightStonePropertiesEntity> findByBuyeIdck(String buyerIdck);
+
 }

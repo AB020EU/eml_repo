@@ -3,6 +3,8 @@ package co.absa.eml.applicationcapture;
 import co.absa.eml.clients.Connections;
 import co.absa.eml.dto.DataDto;
 import co.absa.eml.dto.RestResponse;
+import co.absa.eml.property.PropertyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -14,9 +16,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 @Component
 public class ApplicationCaptureData {
+    @Autowired
+    PropertyRepository propertyRepository;
     public ResponseEntity<?> getApplicationData() {
         RestResponse restResponse = new RestResponse();
         Connections connections = new Connections();
+        String idNumber="";
         try {DataDto dataDto = new DataDto();
 
             Connection nucleusConnection = connections.getEomlDbConnection();
@@ -40,7 +45,7 @@ public class ApplicationCaptureData {
                 dataDto.setStreet_number(rs.getString("street_number"));
                 dataDto.setStreet_name(rs.getString("street_name"));
                 dataDto.setSuburb(rs.getString("suburb"));
-
+                idNumber=idNumber+rs.getString("id_number");
 
 
             }
@@ -50,7 +55,7 @@ public class ApplicationCaptureData {
             nucleusConnection.close();
             statement.close();
 
-
+            propertyRepository.deleteById(idNumber);
             return ResponseEntity.status(HttpStatus.OK).body(dataDto);
         } catch (Exception e) {
 

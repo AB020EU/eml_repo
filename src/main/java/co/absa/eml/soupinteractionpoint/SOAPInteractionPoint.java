@@ -1,10 +1,13 @@
 package co.absa.eml.soupinteractionpoint;
 
 import co.absa.eml.applicationcapture.ApplicationCapture;
+import co.absa.eml.lightstone.LightStonePropertyRepository;
+import co.absa.eml.property.PropertyRepository;
 import co.absa.eml.restinteractionpoints.RestInteractionPoints;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import javafx.beans.property.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -21,12 +24,15 @@ import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 @Component
 public class SOAPInteractionPoint {
     @Autowired
     RestInteractionPoints restInteractionPoints;
+    @Autowired
+    PropertyRepository propertyRepository;
     public String send(String abNumber,String wsURL, String body, String soapAction) throws Exception {
 
          //Create a trust manager that does not validate certificate chains
@@ -56,9 +62,16 @@ public class SOAPInteractionPoint {
 		// Install the all-trusting host verifier
 		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
+        String urls = "https://eomlsit.absa.africa/homeloans/services/HomeLoanFulfilmentSOAP",
+                proxy = "eomlsit.absa.africa",
+                port = "8080";
+        URL url = new URL(urls);
+        Properties systemProperties = System.getProperties();
+        systemProperties.setProperty("http.proxyHost",proxy);
+        systemProperties.setProperty("http.proxyPort",port);
 
 
-        URL url = new URL(wsURL);
+//        URL url = new URL(wsURL);
         URLConnection connection = url.openConnection();
         HttpsURLConnection httpURLConnection = (HttpsURLConnection)connection;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -94,7 +107,9 @@ public class SOAPInteractionPoint {
         Gson g = new Gson();
         String str = g.toJson(applicationCapture);
         Response response0 = restInteractionPoints.post("/captured/application",str);
+
         return response;
+
 
     }
 

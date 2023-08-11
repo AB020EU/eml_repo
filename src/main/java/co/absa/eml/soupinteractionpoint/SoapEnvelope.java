@@ -3,26 +3,41 @@ package co.absa.eml.soupinteractionpoint;
 import co.absa.eml.applicationcapture.ApplicationCaptureData;
 import co.absa.eml.applicationcapture.ReadExcel;
 import co.absa.eml.dto.CaptureApplication;
+import co.absa.eml.property.PropertyRepository;
 import co.absa.eml.restinteractionpoints.RestInteractionPoints;
 import com.google.gson.Gson;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 public class SoapEnvelope {
 
+
     public String XML(CaptureApplication captureApplication) {
-        RestInteractionPoints restInteractionPoints = new RestInteractionPoints();
+RestInteractionPoints restInteractionPoints = new RestInteractionPoints();
 
         Response response0 = restInteractionPoints.get("/get/application/data");
-       //TODO:date of birth
+
 
         ReadExcel readExcel = new ReadExcel();
         readExcel.setExcel();
 
- String c = response0.body().path("id_number");
+        String c = response0.body().path("id_number");
         c=c.substring(0,6);
+        String j=response0.body().path("id_number");
+        j=j.substring(6,10);
+        String gender="";
+
+        int number = Integer.parseInt(j);
+        if(number<=4999){
+            gender="2";
+        }else{
+            gender="1";
+        }
+
+
 
 
         String a = "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
@@ -101,7 +116,7 @@ public class SoapEnvelope {
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
                 "            <idPassportNumber>"+response0.body().path("id_number")+"</idPassportNumber>\n" +
                 "            <dateOfBirth>19"+c+"</dateOfBirth>\n" +
-                "            <gender>1</gender>\n" +
+                "            <gender>"+gender+"</gender>\n" +
                 "            <race>W</race>\n" +
                 "            <otherRaceDescription\n" +
                 "               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n" +
@@ -289,6 +304,7 @@ public class SoapEnvelope {
                 "      </ns2:submitApplicationRequest>\n" +
                 "   </S:Body>\n" +
                 "</S:Envelope>\n";
+
         return a;
     }
 }
