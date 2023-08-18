@@ -3,6 +3,7 @@ package co.absa.eml.applicationcapture;
 import co.absa.eml.clients.Connections;
 import co.absa.eml.dto.DataDto;
 import co.absa.eml.dto.RestResponse;
+import co.absa.eml.lightstone.LightStonePropertyRepository;
 import co.absa.eml.property.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 public class ApplicationCaptureData {
     @Autowired
     PropertyRepository propertyRepository;
+    @Autowired
+    LightStonePropertyRepository lightStonePropertyRepository;
     public ResponseEntity<?> getApplicationData() {
         RestResponse restResponse = new RestResponse();
         Connections connections = new Connections();
@@ -26,7 +29,7 @@ public class ApplicationCaptureData {
 
             Connection nucleusConnection = connections.getEomlDbConnection();
             Statement statement = nucleusConnection.createStatement();
-            ResultSet rs = statement.executeQuery("select id_number,erf,street_number,street_name,suburb from light_stone_properties_entity,property");
+            ResultSet rs = statement.executeQuery("select id,id_number,erf,street_number,street_name,suburb from light_stone_properties_entity,property");
             ArrayList<String> testList = new ArrayList<>();
             int count=0;
             while (rs.next()) {
@@ -45,6 +48,7 @@ public class ApplicationCaptureData {
                 dataDto.setStreet_number(rs.getString("street_number"));
                 dataDto.setStreet_name(rs.getString("street_name"));
                 dataDto.setSuburb(rs.getString("suburb"));
+                dataDto.setProperty_id("id");
                 idNumber=idNumber+rs.getString("id_number");
 
 
@@ -56,6 +60,8 @@ public class ApplicationCaptureData {
             statement.close();
 
             propertyRepository.deleteById(idNumber);
+            lightStonePropertyRepository.deleteById(dataDto.getProperty_id());
+
             return ResponseEntity.status(HttpStatus.OK).body(dataDto);
         } catch (Exception e) {
 

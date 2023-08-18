@@ -6,6 +6,15 @@ public class DataDto {
     String street_number;
     String street_name;
     String suburb;
+    String property_id;
+
+    public String getProperty_id() {
+        return property_id;
+    }
+
+    public void setProperty_id(String property_id) {
+        this.property_id = property_id;
+    }
 
     public String getId_number() {
         return id_number;
